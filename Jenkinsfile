@@ -12,6 +12,10 @@ pipeline {
                 sh 'mvn clean package'
             }
         }
-
+    }
+    post {
+      always {
+        emailext body: '${FILE,path="/home/email.html"}', subject: ' \'构建通知：${PROJECT_NAME} - Build # ${BUILD_NUMBER} - ${BUILD_STATUS}!\',', to: '314499182@qq.com'
+      }
     }
 }
