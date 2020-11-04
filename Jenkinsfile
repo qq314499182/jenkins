@@ -33,7 +33,7 @@ pipeline {
                     sh "docker push 123.56.18.37:25100/iids/jenkins:1.0.0"
                 }
                 //删除虚悬镜像none
-                docker rmi $(docker images -q -f dangling=true)
+                sh 'docker rmi $(docker images -q -f dangling=true)'
                 //删除本地镜像
                 sh "docker rmi -f jenkins:1.0.0"
                 sh "docker rmi -f 123.56.18.37:25100/iids/jenkins:1.0.0"
