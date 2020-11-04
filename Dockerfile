@@ -14,13 +14,13 @@ ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 #编译命令
-#docker build -t iids-app-config:1.0.0 .
+#docker build -t jenkins:1.0.0 .
 
 #删除虚悬镜像none
 #docker rmi $(docker images -q -f dangling=true)
 
 #启动命令
-#docker run -d --network host --restart=always --name iids-app-config iids-app-config:1.0.0
+#docker run -d --network host --restart=always --name jenkins jenkins:1.0.0
 
 #查看日志
-#docker logs -f -t --tail=100 iids-app-config
+#docker logs -f -t --tail=100 jenkins
