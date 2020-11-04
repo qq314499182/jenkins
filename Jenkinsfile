@@ -11,8 +11,8 @@ node {
         submoduleCfg: [],
         userRemoteConfigs: [
           [
-            credentialsId: '${git_auth}',
-            url: '${git_url}'
+            credentialsId: "${git_auth}",
+            url: "${git_url}"
           ]
         ]
       ]
