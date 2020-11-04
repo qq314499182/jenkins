@@ -1,6 +1,12 @@
 node {
+  //git变量
   def git_auth = 'ab4b5c84-9c42-45d8-9de2-a660e604e782'
   def git_url = 'https://github.com/qq314499182/jenkins.git'
+  //harbor变量
+  def harbor_image = 'jenkins:1.0.0'
+  def harbor_url = '123.56.18.37:25100'
+  def harbor_password = '4954eac9-977e-4733-a602-1c24703c37cd'
+
   stage('拉取代码') {
     checkout(
       [
@@ -30,19 +36,19 @@ node {
     //maven编译1
     sh 'mvn clean package -Dmaven.test.skip=true'
     //构建镜像
-    sh 'docker build -t jenkins:1.0.0 .'
+    sh "docker build -t ${harbor_image} ."
     //给镜像打标签
-    sh "docker tag jenkins:1.0.0 123.56.18.37:25100/iids/jenkins:1.0.0"
+    sh "docker tag ${harbor_image} ${harbor_url}/iids/${harbor_image}"
     //登陆harbor,并推送镜像
-    withCredentials([usernamePassword(credentialsId: '4954eac9-977e-4733-a602-1c24703c37cd', passwordVariable: 'password', usernameVariable: 'username')]) {
+    withCredentials([usernamePassword(credentialsId: "${harbor_password}", passwordVariable: 'password', usernameVariable: 'username')]) {
       //登录
-      sh "docker login -u ${username} -p ${password} 123.56.18.37:25100"
+      sh "docker login -u ${username} -p ${password} ${harbor_url}"
       //上传镜像
-      sh "docker push 123.56.18.37:25100/iids/jenkins:1.0.0"
+      sh "docker push ${harbor_url}/iids/${harbor_image}"
     }
     //删除本地镜像
-    sh "docker rmi -f jenkins:1.0.0"
-    sh "docker rmi -f 123.56.18.37:25100/iids/jenkins:1.0.0"
+    sh "docker rmi -f ${harbor_image}"
+    sh "docker rmi -f ${harbor_url}/iids/${harbor_image}"
   }
   stage('部署服务') {
     sshPublisher(
