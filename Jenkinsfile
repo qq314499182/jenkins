@@ -26,7 +26,7 @@ node {
       sh "${scannerHome}/bin/sonar-scanner"
     }
   }
-  stage('代码审查') {
+  stage('编译，构建镜像') {
     //maven编译1
     sh 'mvn clean package -Dmaven.test.skip=true'
     //构建镜像
@@ -44,7 +44,7 @@ node {
     sh "docker rmi -f jenkins:1.0.0"
     sh "docker rmi -f 123.56.18.37:25100/iids/jenkins:1.0.0"
   }
-  stage('代码审查') {
+  stage('部署服务') {
     sshPublisher(
       publishers: [
         sshPublisherDesc(
