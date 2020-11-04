@@ -19,7 +19,7 @@ pipeline {
         }
         stage('编译，构建镜像') {
             steps {
-                //maven编译
+                //maven编译1
                 sh 'mvn clean package -Dmaven.test.skip=true'
                 //构建镜像
                 sh 'docker build -t jenkins:1.0.0 .'

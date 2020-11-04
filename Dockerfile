@@ -13,7 +13,7 @@ ENTRYPOINT java -Djava.security.egd=file:/dev/./urandom -jar ${JVM_OPS} jenkins.
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
-#编译命令
+#编译命令1
 #docker build -t jenkins:1.0.0 .
 
 #删除虚悬镜像none
