@@ -13,7 +13,6 @@ public class JenkinsWeb {
 
     @GetMapping("test")
     public String test(){
-        int i = 1/0;
         return "hello jenkins";
     }
 }
