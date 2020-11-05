@@ -61,7 +61,7 @@ node {
             sshTransfer(
               cleanRemote: false,
               excludes: '',
-              execCommand: "/opt/jenkins_shell/deploy.sh $harbor_url $harbor_project $harbor_image $harbor_version",
+              execCommand: "/opt/jenkins_shell/deployment.sh $harbor_url $harbor_project $harbor_image $harbor_version",
               execTimeout: 120000,
               flatten: false,
               makeEmptyDirs: false,
