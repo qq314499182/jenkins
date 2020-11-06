@@ -2,7 +2,7 @@ FROM openjdk:8
 
 VOLUME /temp
 
-ENV JVM_OPS="-Xms256m -Xmx256m -XX:PermSize=512M"
+ENV JVM_OPS="-Xms256m -Xmx256m -XX:MetaspaceSize=512m -XX:MaxMetaspaceSize=512m"
 
 ENV JAVA_POS=""
 
