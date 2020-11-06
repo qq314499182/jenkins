@@ -53,13 +53,6 @@ node {
     sh "docker rmi -f ${harbor_url}/${harbor_project}/${harbor_image}:${harbor_version}"
   }
   stage('部署服务') {
-    sshPublisher(publishers: [sshPublisherDesc(configName: 'test-1', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/deployment.sh $harbor_url $harbor_project $harbor_image $harbor_version", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
-  }
-  post {
-    always {
-      emailext body: '${FILE,path="/home/email.html"}',
-      subject: ' \'构建通知：${PROJECT_NAME} - Build # ${BUILD_NUMBER} - ${BUILD_STATUS}!\',',
-      to: '314499182@qq.com'
-    }
+    sshPublisher(publishers: [sshPublisherDesc(configName: 'test-1', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/deployment.sh ${harbor_url} ${harbor_project} ${harbor_image} ${harbor_version}", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
   }
 }
