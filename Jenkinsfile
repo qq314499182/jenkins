@@ -40,7 +40,7 @@ node {
     //构建镜像
     sh "docker build -t ${harbor_image}:${harbor_version} ."
     //给镜像打标签
-    sh "docker tag ${harbor_image}:${version} ${harbor_url}/iids/${harbor_image}:${harbor_version}"
+    sh "docker tag ${harbor_image}:${harbor_version} ${harbor_url}/iids/${harbor_image}:${harbor_version}"
     //登陆harbor,并推送镜像
     withCredentials([usernamePassword(credentialsId: "${harbor_password}", passwordVariable: 'password', usernameVariable: 'username')]) {
       //登录
