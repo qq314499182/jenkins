@@ -35,24 +35,27 @@ node {
     }
   }
   stage('编译，构建镜像') {
-    //maven编译1
-    sh 'mvn clean package -Dmaven.test.skip=true'
+    //maven编译
+      sh 'mvn clean package -Dmaven.test.skip=true'
+    //获取pom文件中的版本号
+    version = sh '`awk '/<version>[^<]+<\/version>/{gsub(/<version>|<\/version>/,"",$1);print $1;exit;}' pom.xml`'
+    sh 'echo 获取pom文件中的版本号:${version}'
     //构建镜像
-    sh "docker build -t ${harbor_image}:${harbor_version} ."
+    sh "docker build -t ${harbor_image}:${version} ."
     //给镜像打标签
-    sh "docker tag ${harbor_image}:${harbor_version} ${harbor_url}/iids/${harbor_image}:${harbor_version}"
+    sh "docker tag ${harbor_image}:${version} ${harbor_url}/iids/${harbor_image}:${version}"
     //登陆harbor,并推送镜像
     withCredentials([usernamePassword(credentialsId: "${harbor_password}", passwordVariable: 'password', usernameVariable: 'username')]) {
       //登录
       sh "docker login -u ${username} -p ${password} ${harbor_url}"
       //上传镜像
-      sh "docker push ${harbor_url}/${harbor_project}/${harbor_image}:${harbor_version}"
+      sh "docker push ${harbor_url}/${harbor_project}/${harbor_image}:${version}"
     }
     //删除本地镜像
-    sh "docker rmi -f ${harbor_image}:${harbor_version}"
-    sh "docker rmi -f ${harbor_url}/${harbor_project}/${harbor_image}:${harbor_version}"
+    sh "docker rmi -f ${harbor_image}:${version}"
+    sh "docker rmi -f ${harbor_url}/${harbor_project}/${harbor_image}:${version}"
   }
   stage('部署服务') {
-    sshPublisher(publishers: [sshPublisherDesc(configName: 'test-1', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/deployment.sh $harbor_url $harbor_project $harbor_image $harbor_version", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+    sshPublisher(publishers: [sshPublisherDesc(configName: 'test-1', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/deployment.sh $harbor_url $harbor_project $harbor_image $version", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
   }
 }
