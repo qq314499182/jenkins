@@ -5,7 +5,7 @@ node {
   //harbor变量
   def harbor_project = 'iids'
   def harbor_image = 'jenkins'
-  def harbor_version = '1.0.2'
+  def harbor_version = '1.0.0'
   def harbor_url = '123.56.18.37:25100'
   def harbor_password = '4954eac9-977e-4733-a602-1c24703c37cd'
 
