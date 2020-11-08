@@ -53,6 +53,11 @@ node {
     sh "docker rmi -f ${harbor_url}/${harbor_project}/${harbor_image}:${harbor_version}"
   }
   stage('部署服务') {
-    sshPublisher(publishers: [sshPublisherDesc(configName: 'test-1', transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/deployment.sh $harbor_url $harbor_project $harbor_image $harbor_version", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+    def selectDeploy = "${deploy}".split('@');
+    for(int i = 0;i < selectDeploy.size();i++){
+      def deploy = selectDeploy[i];
+      echo "开始部署:${deploy}"
+      sshPublisher(publishers: [sshPublisherDesc(configName: "${deploy}", transfers: [sshTransfer(cleanRemote: false, excludes: '', execCommand: "/opt/jenkins_shell/deployment.sh $harbor_url $harbor_project $harbor_image $harbor_version", execTimeout: 120000, flatten: false, makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: '')], usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)])
+    }
   }
 }
